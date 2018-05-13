@@ -27,3 +27,5 @@ node_modules/
 
 # Brunch output folder.
 public/
+
+app/config.js
