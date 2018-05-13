@@ -6,6 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import reducers from './reducers';
 import App from './components/App';
+import { BrowserRouter } from 'react-router-dom';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
@@ -31,7 +32,9 @@ if (module.hot) {
 const load = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <App dispatch={store.dispatch} />
+      <BrowserRouter>
+        <App dispatch={store.dispatch} />
+      </BrowserRouter>
     </Provider>,
     document.querySelector('#app')
   );

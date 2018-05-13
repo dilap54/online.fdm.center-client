@@ -27,19 +27,32 @@ export function getMaterials(){
 }
 
 export function getToken(){
-    return (dispatch) => {
-        fetch(config.apiUrl + '/getTemporaryToken', {
-            method: 'POST'
-        }).then((response) => {
-            if (response.ok){
-                return response.json()
-            } else {
-                return Promise.reject()
-            }
-        }).then(token => {
-            dispatch({ type: AUTH_TOKEN, token })
-            dispatch(getMaterials())
-        })
-        .catch(console.error)
+    return (dispatch, getState) => {
+        let localToken = JSON.parse(localStorage.getItem('fdmAuthToken'))
+        if (localToken){
+            dispatch(setToken(localToken))
+        } else {
+            fetch(config.apiUrl + '/getTemporaryToken', {
+                method: 'POST'
+            }).then((response) => {
+                if (response.ok){
+                    return response.json()
+                } else {
+                    return Promise.reject()
+                }
+            }).then(token => {
+                localStorage.setItem('fdmAuthToken', JSON.stringify(token));
+                dispatch(setToken(token))
+            })
+            .catch(console.error)
+        }
+        
+    }
+}
+
+function setToken(token){
+    return (dispatch, getState) => {
+        dispatch({ type: AUTH_TOKEN, token })
+        getMaterials()
     }
 }

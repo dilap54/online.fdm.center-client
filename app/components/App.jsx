@@ -1,24 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
 import MainPage from './MainPage';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
+import Account from './Account'
+import { Route } from 'react-router-dom'
 
 import { getToken } from '../actions/account'
+import { getProducts } from '../actions/products'
+import { getMaterials } from '../actions/materials'
 
 export default class App extends React.Component {
   componentDidMount() {
     this.props.dispatch(getToken())
+    this.props.dispatch(getProducts())
+    this.props.dispatch(getMaterials())
   }
 
   render() {
-    const widget = (
-      <Router>
-        <Route exact path="/" component={MainPage} />
-      </Router>
-    );
-    return widget;
+    return (
+      <div>
+        <header>
+          <Account />
+        </header>
+        <main>
+          <Route exact path="/" component={MainPage} />
+        </main>
+      </div>
+    )
   }
 }
